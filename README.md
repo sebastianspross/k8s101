@@ -23,11 +23,11 @@ az group create --name <RESOURCEGROUP> --location <LOCATION>
 ```
 2. Create Azure Kubernetes Service
 ```powershell
-az aks create \
-    --resource-group <RESOURCEGROUP> \
-    --name <CLUSTERNAME> \
-    --node-count 1 \
-    --enable-addons monitoring \
+az aks create `
+    --resource-group <RESOURCEGROUP> `
+    --name <CLUSTERNAME> `
+    --node-count 1 `
+    --enable-addons monitoring `
     --generate-ssh-keys
 ```
 ### Connect to cluster
@@ -184,7 +184,7 @@ wget http://idrepeater
 ```powershell
 cat index.html
 ```
-### Using LoadBalancer to expose the service outside the cluster
+## Exposing the service to the outside by assigning a LoadBalancer and IP
 * Edit the yaml of the service as follows. By default the type of a service is ClusterIp. We will change it to LoadBalancer. When you update the service with the new yaml file kubernetes will immediatly create a IP in Azure and connect it to your service directly. 
  ```yaml
 apiVersion: v1
@@ -204,4 +204,80 @@ kubectl apply -f .\service.yml
 * It will take some time until the IP is scheduled.
 ```powershell
 kubectl get svc -w
+```
+## Configer an Ingress
+Kubernetes is supporting the concept of an ingress. In the following we will use the standard nginx ingress but there are a lot of open source projects out there which offers much more value than just a reverse proxy.
+* Helm is a package manager and can keep track of your deployments to e.g. roll back. Go to the release page and install helm.
+```link
+https://github.com/helm/helm/releases
+```
+* Next, the local Helm client has to be connected with your cluster. By calling `helm init` helm will use the credentials of the current Kubernetes cluster and install the **Tiller** (let's call this the server side in the cluster).
+```powershell
+helm init
+```
+* Checkthe versions of your client and the tiller
+```powershell
+helm version
+```
+* The **Tiller** needs privileges to install applications. Apply the following yaml with `kubectl apply -f <FILENAME>`
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tiller
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tiller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: tiller
+    namespace: kube-system
+```
+Let your running **tiller** know about the privilege changes.
+```powershell
+helm init --service-account=tiller --upgrade
+```
+* Setup an ingress which works with basic http. https://docs.microsoft.com/en-us/azure/aks/ingress-basic
+```powershell
+helm install stable/nginx-ingress `
+    --set controller.replicaCount=1 `
+    --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux `
+    --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux
+```
+* There will be a new helm repository.
+```powershell
+helm ls
+```
+Check the running pods und services.
+```powershell
+kubectl get pods
+```
+```powershell
+kubectl get svc
+```
+The exposed service of the nignx will show a 404 error. To solve this we have to create an ingress route which points to our `service` of `js-idrepeater`.
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-js-idrepeater
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: js-idrepeater
+          servicePort: 80
+        path: /js-idrepeater      
 ```
