@@ -1,4 +1,4 @@
-# K8s Hands-on
+# K8s Hands-on 🚢
 Here, a random introduction will find its place. Probably I will link the ppt in additon.
 > This guided hands-on workshop was tested with AKS 1.12.8.  
 
@@ -11,7 +11,7 @@ Here, a random introduction will find its place. Probably I will link the ppt in
 ```powershell
 az aks install-cli
 ```
-# Switch to needed Azure subscription
+# Switch to needed Azure subscription 🔀
 First, check which subscriptions are available.
 ````powershell
 az account list --refresh
@@ -33,7 +33,7 @@ az aks create `
     --enable-addons monitoring `
     --generate-ssh-keys
 ```
-# Connect to cluster
+# Connect to cluster 🔌
 You can connect to any azure cluster by downloading the credentials.
 ```
 az aks get-credentials --resource-group <RESOURCEGROUP> --name <CLUSTERNAME>
@@ -46,7 +46,7 @@ Finally, get informations about your running nodes.
 ```powershell
 kubectl get nodes
 ```
-# Kubernetes 101 - the imperative way
+# Kubernetes 101 - the imperative way 🔨
 ## Deploy a cached image
 One of the availble precached images is a nginx image. Run it with the following command.
 ```powershell
@@ -84,7 +84,7 @@ So, if you actually want to delete the three nginx you have to delete the deploy
 ```powershell
 kubectl delete deployment nginx
 ```
-# Kubernetes 101 - the declarative way (YAML)
+# Kubernetes 101 - the declarative way (YAML) 📓🖊️
 In the previous steps you deployed a precached image of nginx witch imperative commands. Now you will not using just yaml to deploy the image in a declarative way but even use your own containerized application. To do so, you have to push your application first to a container registry as shown in the picture below. Afterwards you can apply a yaml file directly to the cluster with a link of the image in the container registry.  
 <p align="center">
 <img src="images/acr-yaml-aks.png" alt="drawing" width="500"/>  
@@ -110,7 +110,7 @@ $ACR_ID=$(az acr show --name $ACR_NAME --resource-group $ACR_RESOURCE_GROUP --qu
 az role assignment create --assignee $CLIENT_ID --role acrpull --scope $ACR_ID
 ```
 > Open the Azure portal and validate if you can see a `role assignment` from the AKS's SP under `Access control` of the ACR.
-## Prepare the sample Node Application
+## Prepare the sample Node Application 📦
 Checkout the `js-idrepater` which is located in this GitHub repository.
 Run the docker build command. Tag the image with the application's name (`js-idrepeater`) and set a version number like `1` or `v1`. Notice that we used the prefix `<ACR_NAME>.azurecr.io`. We need this prefix for the docker push command later. Do not forget the dot at the end.
 ```powershell
@@ -204,7 +204,7 @@ spec:
               initialDelaySeconds: 3
               periodSeconds: 3
 ```
-# Kubernetes' service discovery
+# Kubernetes' service discovery 🔎
 As you already noticed there are more than just one `js-idrepeater` `pod`. You need an abstraction layer which knows every `pod` no matter on which node it is running on. Other szenarios can be: scale-out, recreation of a pod, scheduling pods to other nodes and all other cases in which pods might change their IP or count. The `service` is doing this job in Kubernetes. The `service` uses `selectors` which matches with `labels` in the pod yaml.
 > Inspect the deployment.yaml file and find the `spec.template.metadata.labels.app` which is set to `js-idrepeater`. 
 <p align="center">
@@ -264,7 +264,7 @@ It will take some time until the IP is scheduled.
 ```powershell
 kubectl get svc -w
 ```
-# Configure an Ingress
+# Configure an Ingress 🛰️
 Kubernetes is supporting the concept of an ingress. In the following we will use the standard nginx ingress but there are a lot of open source projects which offers much more value than just a reverse proxy. You will use `helm` to install the `nginx`.  
 
 ## Install helm
