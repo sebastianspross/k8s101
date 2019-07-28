@@ -11,16 +11,16 @@ Here, a random introduction will find its place. Probably I will link the ppt in
 ```powershell
 az aks install-cli
 ```
-# Switch to needed Azure subscription 🔀
-First, check which subscriptions are available.
+# Switch to needed Azure subscription
+First, check which subscriptions are available. Use the `--refresh` flag since the list is cached.
 ````powershell
 az account list --refresh
 ````
-Set the context of the needed subscroption.
+Set the context of the needed subscroption. You can either use the name or ID.
 ```powershell
 az account set --subscription <SUBSCRIPTION>
 ```
-# Create an AKS Cluster
+# Create an AKS Cluster 
 Create a resource group and the AKS cluster. Another resource group will automaticcally be built during the create process. In the second resource group you will finde the infrastructure like virtual machines.
 ```powershell
 az group create --name <RESOURCEGROUP> --location <LOCATION>
