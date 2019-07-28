@@ -1,4 +1,4 @@
-# K8s Hands-on
+# K8s Hands-on 🚢
 Here a random introduction will find its place. Probably I will link the ppt in additon.
 # Prerequisite
 > Alternatively you can use http://shell.azure.com
@@ -107,7 +107,7 @@ $ACR_ID=$(az acr show --name $ACR_NAME --resource-group $ACR_RESOURCE_GROUP --qu
 az role assignment create --assignee $CLIENT_ID --role acrpull --scope $ACR_ID
 ```
 > Open the Azure portal and validate if you can see a `role assignment` from the AKS's SP under `Access control` of the ACR.
-## Prepare the sample Node Application
+## Prepare the sample Node Application 📦
 Checkout the `js-idrepater` which is located in this GitHub repository.
 Run the docker build command. Tag the image with the application's name (`js-idrepeater`) and set a version number like `1` or `v1`. Notice that we used the prefix `<ACR_NAME>.azurecr.io`. We need this prefix for the docker push command later. Do not forget the dot at the end.
 ```powershell
@@ -165,7 +165,7 @@ Forward to this pod and call `http://localhost`.
 ```powershell
 kubectl port-forward <NAME_OF_POD> 80:80
 ```
-# Kubernetes' service discovery
+# Kubernetes' service discovery 🔎
 As you already noticed there are more than just one `js-idrepeater` `pod`. You need an abstraction layer which knows every `pod` no matter on which node it is running on. Other szenarios can be: scale-out, recreation of a pod, scheduling pods to other nodes and all other cases in which pods might change their IP or count. The `service` is doing this job in Kubernetes. The `service` uses `selectors` which matches with `labels` in the pod yaml.
 > Inspect the deployment.yaml file and find the `spec.template.metadata.labels.app` which is set to `js-idrepeater`. 
 <p align="center">
@@ -225,7 +225,7 @@ It will take some time until the IP is scheduled.
 ```powershell
 kubectl get svc -w
 ```
-# Configure an Ingress
+# Configure an Ingress 🚀
 Kubernetes is supporting the concept of an ingress. In the following we will use the standard nginx ingress but there are a lot of open source projects which offers much more value than just a reverse proxy. You will use `helm` to install the `nginx`.  
 
 ## Install helm
