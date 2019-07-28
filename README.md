@@ -1,11 +1,11 @@
 # K8s Hands-on 🚢
-Here, a random introduction will find its place. Probably I will link the ppt in additon.
+Here, a random introduction will find its place. Probably I will link the ppt in addition.
 > This guided hands-on workshop was tested with AKS 1.12.8.  
 
 > This workshop is accompanied by an instructor and additional slides.
 # Prerequisite
 > Alternatively you can use http://shell.azure.com
-* Install the kubernetes command line interface: [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/ "https://kubernetes.io/docs/tasks/tools/install-kubectl/")
+* Install the Kubernetes command line interface: [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/ "https://kubernetes.io/docs/tasks/tools/install-kubectl/")
 * Install [Azure CLI](https://docs.microsoft.com/de-de/cli/azure/install-azure-cli?view=azure-cli-latest "https://docs.microsoft.com/de-de/cli/azure/install-azure-cli?view=azure-cli-latest")
 * Install the Azure Kubernetes Service command line interface by using the following command
 ```powershell
@@ -16,12 +16,12 @@ First, check which subscriptions are available. Use the `--refresh` flag since t
 ````powershell
 az account list --refresh
 ````
-Set the context of the needed subscroption. You can either use the name or ID.
+Set the context of the needed subscription. You can either use the name or ID.
 ```powershell
 az account set --subscription <SUBSCRIPTION>
 ```
 # Create an AKS Cluster 
-Create a resource group and the AKS cluster. Another resource group will automaticcally be built during the create process. In the second resource group you will finde the infrastructure like virtual machines.
+Create a resource group and the AKS cluster. Another resource group will automatically be built during the create process. In the second resource group you will find the infrastructure like virtual machines.
 ```powershell
 az group create --name <RESOURCEGROUP> --location <LOCATION>
 ```
@@ -42,13 +42,13 @@ To verify if you are successfully connected open the config.
 ```
 kubectl config get-contexts
 ```
-Finally, get informations about your running nodes.
+Finally, get information about your running nodes.
 ```powershell
 kubectl get nodes
 ```
 # Kubernetes 101 - the imperative way 🔨
 ## Deploy a cached image
-One of the availble precached images is a nginx image. Run it with the following command.
+One of the available precached images is a nginx image. Run it with the following command.
 ```powershell
 kubectl run nginx --image=nginx --replicas=3
 ```
@@ -72,7 +72,7 @@ kubectl get deployment
 ```powershell
 kubectl edit deployment <NAME_OF_DEPLOYMENT>
 ```
-In the deployment yaml it says `replicas: 3`. Delete the pod to see the self healing mechanism of kubernetes. To follow the whole process open another terminal and call `kubectl get pods -w`. This will stream any changes.
+In the deployment yaml it says `replicas: 3`. Delete the pod to see the self-healing mechanism of kubernetes. To follow the whole process, open another terminal and call `kubectl get pods -w`. This will stream any changes.
 ```powershell
 kubectl delete pod <NAME_OF_POD>
 ```
@@ -85,7 +85,7 @@ So, if you actually want to delete the three nginx you have to delete the deploy
 kubectl delete deployment nginx
 ```
 # Kubernetes 101 - the declarative way (YAML) 📓🖊️
-In the previous steps you deployed a precached image of nginx witch imperative commands. Now you will not using just yaml to deploy the image in a declarative way but even use your own containerized application. To do so, you have to push your application first to a container registry as shown in the picture below. Afterwards you can apply a yaml file directly to the cluster with a link of the image in the container registry.  
+In the previous steps you deployed a precached image of nginx witch imperative commands. Now you will not be using just yaml to deploy the image in a declarative way but even use your own containerized application. To do so, you must push your application first to a container registry as shown in the picture below. Afterwards you can apply a yaml file directly to the cluster with a link of the image in the container registry.  
 <p align="center">
 <img src="images/acr-yaml-aks.png" alt="drawing" width="500"/>  
 </p>
@@ -111,7 +111,7 @@ az role assignment create --assignee $CLIENT_ID --role acrpull --scope $ACR_ID
 ```
 > Open the Azure portal and validate if you can see a `role assignment` from the AKS's SP under `Access control` of the ACR.
 ## Prepare the sample Node Application 📦
-Checkout the `js-idrepater` which is located in this GitHub repository.
+Checkout the `js-idrepater` which is in this GitHub repository.
 Run the docker build command. Tag the image with the application's name (`js-idrepeater`) and set a version number like `1` or `v1`. Notice that we used the prefix `<ACR_NAME>.azurecr.io`. We need this prefix for the docker push command later. Do not forget the dot at the end.
 ```powershell
 docker build -t <ACR_NAME>.azurecr.io/js-idrepeater:1 .
@@ -120,7 +120,7 @@ Test `js-idrepeater` locally. Do not forget to forward the machines port to the 
 ```powershell
 docker run -p 80:80 <ACR_NAME>.azurecr.io/js-idrepeater:1
 ```
-To validate that the application is running open a browser and call the localhost. You will see a random four digit key. This key is generated on start up of the container and will not change during the whole lifecycle of the container. To understand this behavior kill the container and run it once again.
+To validate that the application is running, open a browser and call the localhost. You will see a random four-digit key. This key is generated on startup of the container and will not change during the whole lifecycle of the container. To understand this behavior, kill the container and run it once again.
 ```
 http://localhost:80
 ```
@@ -135,7 +135,7 @@ Visit the ACR resource in the Azure portal to verify the upload. Look for `Repos
 ## Deploy the `js-idrepeater` to your AKS Cluster 🚀
 Next you will create a kubernetes deployment yaml. In the source tree of `js-idrepeater` create a folder named `manifests`. Inside, create a file and call it `deployment.yml`. If you stick to the provided names of the folder and files Azure DevOps can read these files automatically in a later exercise of this workshop.  
 
-Please consider, that you have to point to the correct version of your image! For now you are good by taking `1`. Since we applied the privilges to access the ACR to the SP we are all good. If you had to create a Kubernetes secret before please use it now as an `imagePullSecrets`. Place it like this `spec.template.spec.imagePullSecrets`.
+Please consider, that you have to point to the correct version of your image! For now you are good by taking `1`. Since we applied the privileges to access the ACR to the SP we are all good. If you had to create a Kubernetes secret before please use it now as an `imagePullSecrets`. Place it like this `spec.template.spec.imagePullSecrets`.
 ```yaml
 apiVersion : apps/v1beta1
 kind: Deployment
@@ -169,7 +169,7 @@ Forward to this pod and call `http://localhost`.
 kubectl port-forward <NAME_OF_POD> 80:80
 ```
 ## Self testing 💉
-The cluster will immediatly recreate a pod if a container / pod crashes. But that way you do not validate if the application inside the container is still running. Therefore you can specify in any deployment yaml a livness probe. The following liveness probe is calling the API `healthz` with a initial delay of three seconds.  
+The cluster will immediately recreate a pod if a container / pod crashes. But that way you do not validate if the application inside the container is still running. Therefore, you can specify in any deployment yaml a liveness probe. The following liveness probe is calling the API `healthz` with a initial delay of three seconds.  
 > The node application will spin up in three seconds. But always consider that some applications will take longer.
 ```yaml
 livenessProbe:
@@ -205,7 +205,7 @@ spec:
               periodSeconds: 3
 ```
 # Kubernetes' service discovery 🔎
-As you already noticed there are more than just one `js-idrepeater` `pod`. You need an abstraction layer which knows every `pod` no matter on which node it is running on. Other szenarios can be: scale-out, recreation of a pod, scheduling pods to other nodes and all other cases in which pods might change their IP or count. The `service` is doing this job in Kubernetes. The `service` uses `selectors` which matches with `labels` in the pod yaml.
+As you already noticed there are more than just one `js-idrepeater` `pod`. You need an abstraction layer which knows every `pod` no matter on which node it is running on. Other scenarios can be scale-out, recreation of a pod, scheduling pods to other nodes and all other cases in which pods might change their IP or count. The `service` is doing this job in Kubernetes. The `service` uses `selectors` which matches with `labels` in the pod yaml.
 > Inspect the deployment.yaml file and find the `spec.template.metadata.labels.app` which is set to `js-idrepeater`. 
 <p align="center">
 <img src="images/service-discovery.png" alt="drawing" />  
@@ -244,7 +244,7 @@ wget http://idrepeater
 cat index.html
 ```
 # Exposing the service to the outside by assigning a LoadBalancer with IP
-Edit the yaml of the service as follows. By default the type of a service is ClusterIp and it is not needed to specify. We will change it to LoadBalancer. When you update the service with the new yaml file kubernetes will use the SP to create a IP and LoadBalancer. Afterwards a rule will be automatically defined which routes the traffic to the IP directly to the service in the AKS. 
+Edit the yaml of the service as follows. By default, the type of a service is ClusterIp and it is not needed to specify. We will change it to LoadBalancer. When you update the service with the new yaml file kubernetes will use the SP to create a IP and LoadBalancer. Afterwards a rule will be automatically defined which routes the traffic to the IP directly to the service in the AKS. 
  ```yaml
 apiVersion: v1
 kind: Service
@@ -272,7 +272,7 @@ Helm is a package manager and can keep track of your deployments to e.g. roll ba
 ```link
 https://github.com/helm/helm/releases
 ```
-Next, the local `Helm client` has to be connected to your cluster. By calling `helm init`, helm will install the `Tiller`. It is the server side of your packagemanagement system.
+Next, the local `Helm client` has to be connected to your cluster. By calling `helm init`, helm will install the `Tiller`. It is the server side of your package management system.
 ```powershell
 helm init
 ```
