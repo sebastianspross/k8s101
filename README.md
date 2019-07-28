@@ -1,5 +1,8 @@
 # K8s Hands-on
-Here a random introduction will find its place. Probably I will link the ppt in additon.
+Here, a random introduction will find its place. Probably I will link the ppt in additon.
+> This guided hands-on workshop was tested with AKS 1.12.8.  
+
+> This workshop is accompanied by an instructor and additional slides.
 # Prerequisite
 > Alternatively you can use http://shell.azure.com
 * Install the kubernetes command line interface: [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/ "https://kubernetes.io/docs/tasks/tools/install-kubectl/")
@@ -129,7 +132,7 @@ az acr login -n <ACR_NAME>
 docker push <ACR_NAME>.azurecr.io/js-idrepeater:1
 ```
 Visit the ACR resource in the Azure portal to verify the upload. Look for `Repositories` in the menu and check if a repository with `js-idrepeater` was created.
-## Deploy the `js-idrepeater` to your AKS Cluster
+## Deploy the `js-idrepeater` to your AKS Cluster 🚀
 Next you will create a kubernetes deployment yaml. In the source tree of `js-idrepeater` create a folder named `manifests`. Inside, create a file and call it `deployment.yml`. If you stick to the provided names of the folder and files Azure DevOps can read these files automatically in a later exercise of this workshop.  
 
 Please consider, that you have to point to the correct version of your image! For now you are good by taking `1`. Since we applied the privilges to access the ACR to the SP we are all good. If you had to create a Kubernetes secret before please use it now as an `imagePullSecrets`. Place it like this `spec.template.spec.imagePullSecrets`.
@@ -164,6 +167,42 @@ kubectl get pods
 Forward to this pod and call `http://localhost`.
 ```powershell
 kubectl port-forward <NAME_OF_POD> 80:80
+```
+## Self testing 💉
+The cluster will immediatly recreate a pod if a container / pod crashes. But that way you do not validate if the application inside the container is still running. Therefore you can specify in any deployment yaml a livness probe. The following liveness probe is calling the API `healthz` with a initial delay of three seconds.  
+> The node application will spin up in three seconds. But always consider that some applications will take longer.
+```yaml
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 80
+  initialDelaySeconds: 3
+  periodSeconds: 3
+```
+The full deployment yaml will look like the following. Use `kubectl apply -f <FILENAME>` to deploy it.
+```yaml
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: js-idrepeater 
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: js-idrepeater
+    spec:
+      containers:
+        - name: js-idrepeater 
+          image: <ACR_NAME>.azurecr.io/js-idrepeater:1
+          ports:
+          - containerPort: 80
+          livenessProbe:
+              httpGet:
+                path: /healthz
+                port: 80
+              initialDelaySeconds: 3
+              periodSeconds: 3
 ```
 # Kubernetes' service discovery
 As you already noticed there are more than just one `js-idrepeater` `pod`. You need an abstraction layer which knows every `pod` no matter on which node it is running on. Other szenarios can be: scale-out, recreation of a pod, scheduling pods to other nodes and all other cases in which pods might change their IP or count. The `service` is doing this job in Kubernetes. The `service` uses `selectors` which matches with `labels` in the pod yaml.

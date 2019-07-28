@@ -15,5 +15,9 @@ app.get("/", (req, res, next) => {
     console.log(myId);
 });
 
+app.get("/healthz", (req, res, next) => {
+    res.status(200).send("Ok");
+});
+
 app.listen(config.port);
 console.log('Listening on localhost:' + config.port);
