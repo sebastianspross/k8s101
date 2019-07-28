@@ -43,7 +43,7 @@ Finally, get informations about your running nodes.
 ```powershell
 kubectl get nodes
 ```
-# Kubernetes 101 - the imperative way
+# Kubernetes 101 - the imperative way 🔨
 ## Deploy a cached image
 One of the availble precached images is a nginx image. Run it with the following command.
 ```powershell
@@ -81,7 +81,7 @@ So, if you actually want to delete the three nginx you have to delete the deploy
 ```powershell
 kubectl delete deployment nginx
 ```
-# Kubernetes 101 - the declarative way (YAML)
+# Kubernetes 101 - the declarative way (YAML) 📓
 In the previous steps you deployed a precached image of nginx witch imperative commands. Now you will not using just yaml to deploy the image in a declarative way but even use your own containerized application. To do so, you have to push your application first to a container registry as shown in the picture below. Afterwards you can apply a yaml file directly to the cluster with a link of the image in the container registry.  
 <p align="center">
 <img src="images/acr-yaml-aks.png" alt="drawing" width="500"/>  
