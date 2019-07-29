@@ -48,7 +48,7 @@ kubectl get nodes
 ```
 # Kubernetes 101 - the imperative way 🔨
 ## Deploy a cached image
-One of the available pre-cached images is a nginx image. Run it with the following command.
+One of the available pre-cached images is an nginx image. Run it with the following command.
 ```powershell
 kubectl run nginx --image=nginx --replicas=3
 ```
@@ -61,7 +61,7 @@ Check if 3 Pods are running.
 ```powershell
 kubectl get Pods
 ```
-Create a tunnel while using port forwarding. You should see the welcome site of a nginx deployment when you open `http//:localhost`.
+Create a tunnel while using port forwarding. You should see the welcome site of an nginx deployment when you open `http//:localhost`.
 ```powershell
 kubectl port-forward <NAME_OF_Pod> 80:80
 ```
@@ -76,16 +76,16 @@ In the deployment yaml it says `replicas: 3`. Delete the Pod to see the self-hea
 ```powershell
 kubectl delete Pod <NAME_OF_Pod>
 ```
-The Pod will be recreated immediately since the ReplicaSet of the deployment says that there should be 3 ReplicaSet at any time. This is a huge thing since Kubernetes will always look for the healthiness of your applications. 
+The Pod will be recreated immediately since the ReplicaSet of the deployment says that there should be 3 Pods at any time. This is a huge thing since Kubernetes will always look for the healthiness of your applications. 
 ```powershell
 kubectl get Pods
 ```
-So, if you actually want to delete the three nginx you have to delete the deployment. Do that and clean up.
+So, if you actually want to delete the three nginx pods you have to delete the deployment. Do that and clean up.
 ```powershell
 kubectl delete deployment nginx
 ```
 # Kubernetes 101 - the declarative way (YAML) 📓🖊️
-In the previous steps you deployed a pre-cached image of nginx witch imperative commands. Now you will not be using just yaml to deploy the image in a declarative way but even use your own containerized application. To do so, you must push your application first to a container registry as shown in the picture below. Afterwards you can apply a yaml file directly to the cluster with a link of the image in the container registry.  
+In the previous steps you deployed a pre-cached image of nginx with imperative commands. Now you will not be using just yaml to deploy the image in a declarative way but even use your own containerized application. To do so, you must push your application first to a container registry as shown in the picture below. Afterwards you can apply a yaml file directly to the cluster with a link of the image in the container registry.  
 <p align="center">
 <img src="images/acr-yaml-aks.png" alt="drawing" width="500"/>  
 </p>
@@ -97,7 +97,7 @@ Create an ACR by using the azure cli. For simplicity, we set the `--admin-enable
 az acr create -n <REGISTRY_NAME> -g <RESOURCE_GROUP_NAME> --sku Standard --admin-enabled true --location <LOCATION>
 ```
 ### Prepare the Cluster
-Next, we will deploy own images by using yaml files. In these yaml files we will link an ACR. To enable the AKS to access the ACR we can add the privileges to the existing Service Principal (SP) which was created during the cluster creation. In case you do not have enough privileges to do so, we can create a Kubernetes secret. Review [this Microsoft Docs](https://docs.microsoft.com/de-de/azure/container-registry/container-registry-auth-aks "https://docs.microsoft.com/de-de/azure/container-registry/container-registry-auth-aks") to understand both ways.  
+Next, we will deploy our own images by using yaml files. In these yaml files we will link an ACR. To enable the AKS to access the ACR we can add the privileges to the existing Service Principal (SP) which was created during the cluster creation. In case you do not have enough privileges to do so, we can create a Kubernetes secret. Review [this Microsoft Docs](https://docs.microsoft.com/de-de/azure/container-registry/container-registry-auth-aks "https://docs.microsoft.com/de-de/azure/container-registry/container-registry-auth-aks") to understand both ways.  
 
 Replace the variables and run this powershell script to add the privileges to the existing SP.
 ```powershell
@@ -154,7 +154,7 @@ spec:
           ports:
           - containerPort: 80
 ```
-> As we do not specify any namespace `default` is used  
+> As we did not specify any namespace, the `default` namespace is used  
 
 Next, apply the `Deployment` to your Kubernetes cluster.
 ```powershell
@@ -211,7 +211,7 @@ As you already noticed there are more than just one `js-idrepeater` `Pod`. You n
 <img src="images/Service-discovery.png" alt="drawing" />  
 </p> 
 
-Create the file `Service.yml` next to the deployment file. And apply it to AKS.
+Create the file `Service.yml` next to the deployment file. Then apply it to your AKS.
  ```yaml
 apiVersion: v1
 kind: Service
