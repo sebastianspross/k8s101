@@ -303,7 +303,7 @@ subjects:
 ```
 Let your running `tiller` know about the privilege changes.
 ```powershell
-helm init --Service-account=tiller --upgrade
+helm init --service-account=tiller --upgrade
 ```
 ## Setup an Ingress which works with basic http.
 > For simplicity we will use a [basic http](https://docs.microsoft.com/en-us/azure/aks/Ingress-basic "https://docs.microsoft.com/en-us/azure/aks/Ingress-basic") configured nginx. Please consider to use [TLS secured](https://docs.microsoft.com/en-us/azure/aks/Ingress-tls "https://docs.microsoft.com/en-us/azure/aks/Ingress-tlsc") nginx deployments.  
