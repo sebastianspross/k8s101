@@ -208,7 +208,7 @@ spec:
 As you already noticed there are more than just one `js-idrepeater` `Pod`. You need an abstraction layer which knows every `Pod` no matter on which node it is running on. Other scenarios can be scale-out, recreation of a Pod, scheduling Pods to other nodes and all other cases in which Pods might change their IP or count. The `Service` is doing this job in Kubernetes. The `Service` uses `selectors` which matches with `labels` in the Pod yaml.
 > Inspect the deployment.yaml file and find the `spec.template.metadata.labels.app` which is set to `js-idrepeater`. 
 <p align="center">
-<img src="images/Service-discovery.png" alt="drawing" />  
+<img src="images/service-discovery.png" alt="drawing" />  
 </p> 
 
 Create the file `Service.yml` next to the deployment file. Then apply it to your AKS.
@@ -310,7 +310,7 @@ helm init --Service-account=tiller --upgrade
 
 The `Ingress` will be our reverse proxy.  
 <p align="center">
-<img src="images/Ingress.png" alt="drawing" width="650"/>  
+<img src="images/ingress.png" alt="drawing" width="650"/>  
 </p>
 
 ```powershell
