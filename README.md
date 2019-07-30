@@ -60,11 +60,11 @@ This command will result in a *deployment* which is related to a *ReplicaSet*. T
 
 Check if 3 Pods are running.
 ```powershell
-kubectl get Pods
+kubectl get pods
 ```
 Create a tunnel while using port forwarding. You should see the welcome site of an nginx deployment when you open `http//:localhost`.
 ```powershell
-kubectl port-forward <NAME_OF_Pod> 80:80
+kubectl port-forward <NAME_OF_POD> 80:80
 ```
 The kubectl run command created a deployment as shown above. Start editing it and analyze the code.
 ```powershell
@@ -75,11 +75,11 @@ kubectl edit deployment <NAME_OF_DEPLOYMENT>
 ```
 In the deployment yaml it says `replicas: 3`. Delete the Pod to see the self-healing mechanism of Kubernetes. To follow the whole process, open another terminal and call `kubectl get Pods -w`. This will stream any changes.
 ```powershell
-kubectl delete Pod <NAME_OF_Pod>
+kubectl delete pod <NAME_OF_POD>
 ```
 The Pod will be recreated immediately since the ReplicaSet of the deployment says that there should be 3 Pods at any time. This is a huge thing since Kubernetes will always look for the healthiness of your applications. 
 ```powershell
-kubectl get Pods
+kubectl get pods
 ```
 So, if you actually want to delete the three nginx pods you have to delete the deployment. Do that and clean up.
 ```powershell
@@ -163,7 +163,7 @@ kubectl apply -f .\deployment.yml
 ```
 Check if the deployment created your Pod.
 ```powershell
-kubectl get Pods
+kubectl get pods
 ```
 Forward to this Pod and call `http://localhost`.
 ```powershell
@@ -233,7 +233,7 @@ kubectl get svc
 ```
 Next, log on one of the running Pods and call the another one by using the Service.
 ```powershell
-kubectl get Pods
+kubectl get pods
 ```
 ```powershell
 kubectl exec -it <Pod_NAME_NGINX> /bin/sh
@@ -326,7 +326,7 @@ helm ls
 ```
 Check the running Pods und Services.
 ```powershell
-kubectl get Pods
+kubectl get pods
 ```
 ```powershell
 kubectl get svc
