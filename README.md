@@ -5,7 +5,7 @@ Here, a random introduction will find its place. Probably I will link the ppt in
 > This workshop is accompanied by an instructor and additional slides.
 # Prerequisite
 > Alternatively you can use http://shell.azure.com
-* Install [docker for windwos](https://docs.docker.com/docker-for-windows/install/ "https://docs.docker.com/docker-for-windows/install/")
+* Install [docker for windows](https://docs.docker.com/docker-for-windows/install/ "https://docs.docker.com/docker-for-windows/install/")
 * Install the Kubernetes command line interface: [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/ "https://kubernetes.io/docs/tasks/tools/install-kubectl/")
 * Install [Azure CLI](https://docs.microsoft.com/de-de/cli/azure/install-azure-cli?view=azure-cli-latest "https://docs.microsoft.com/de-de/cli/azure/install-azure-cli?view=azure-cli-latest")
 * Install the Azure Kubernetes Service command line interface by using the following command
