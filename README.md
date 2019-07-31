@@ -314,10 +314,10 @@ The `Ingress` will be our reverse proxy.
 </p>
 
 ```powershell
-helm install stable/nginx-Ingress `
+helm install stable/nginx-ingress `
     --set controller.replicaCount=1 `
-    --set controller.nodeSelector."beta\.Kubernetes\.io/os"=linux `
-    --set defaultBackend.nodeSelector."beta\.Kubernetes\.io/os"=linux
+    --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux `
+    --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux
 ```
 The command `helm ls` will show you all installed helm repositories. 
 ```powershell
