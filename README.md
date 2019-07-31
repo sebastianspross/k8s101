@@ -105,7 +105,7 @@ $AKS_RESOURCE_GROUP="<AKS_RESOURCE_GROUP>"
 $AKS_CLUSTER_NAME="<AKS_CLUSTER_NAME>"
 $ACR_RESOURCE_GROUP="<ACR_RESOURCE_GROUP>"
 $ACR_NAME="ACR_NAME"
-$CLIENT_ID=$(az aks show --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME --query "ServicePrincipalProfile.clientId" --output tsv)
+$CLIENT_ID=$(az aks show --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME --query "servicePrincipalProfile.clientId" --output tsv)
 $ACR_ID=$(az acr show --name $ACR_NAME --resource-group $ACR_RESOURCE_GROUP --query "id" --output tsv)
 az role assignment create --assignee $CLIENT_ID --role acrpull --scope $ACR_ID
 ```
@@ -208,7 +208,7 @@ spec:
 As you already noticed there are more than just one `js-idrepeater` `Pod`. You need an abstraction layer which knows every `Pod` no matter on which node it is running on. Other scenarios can be scale-out, recreation of a Pod, scheduling Pods to other nodes and all other cases in which Pods might change their IP or count. The `Service` is doing this job in Kubernetes. The `Service` uses `selectors` which matches with `labels` in the Pod yaml.
 > Inspect the deployment.yaml file and find the `spec.template.metadata.labels.app` which is set to `js-idrepeater`. 
 <p align="center">
-<img src="images/Service-discovery.png" alt="drawing" />  
+<img src="images/service-discovery.png" alt="drawing" />  
 </p> 
 
 Create the file `Service.yml` next to the deployment file. Then apply it to your AKS.
