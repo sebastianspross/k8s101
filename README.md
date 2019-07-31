@@ -238,7 +238,7 @@ kubectl get Pods
 kubectl exec -it <Pod_NAME_NGINX> /bin/sh
 ```
 ```powershell
-wget http://idrepeater
+wget http://js-idrepeater
 ```
 ```powershell
 cat index.html
