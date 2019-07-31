@@ -2,7 +2,9 @@
 Here, a random introduction will find its place. Probably I will link the ppt in addition.
 > This guided hands-on workshop was tested with AKS 1.12.8.  
 
-> This workshop is accompanied by an instructor and additional slides.
+> This workshop is accompanied by an instructor and additional slides.  
+
+> The commands are powershell specific.
 # Prerequisite
 > Alternatively you can use http://shell.azure.com
 * Install [docker for windows](https://docs.docker.com/docker-for-windows/install/ "https://docs.docker.com/docker-for-windows/install/")
@@ -13,7 +15,11 @@ Here, a random introduction will find its place. Probably I will link the ppt in
 az aks install-cli
 ```
 # Switch to needed Azure subscription
-First, check which subscriptions are available. Use the `--refresh` flag since the list is cached.
+Log in.
+```powershell
+az login
+```
+Check which subscriptions are available. Use the `--refresh` flag since the list is cached.
 ````powershell
 az account list --refresh
 ````
@@ -225,7 +231,7 @@ spec:
         app: js-idrepeater
 ```
 ```powershell
-kubectl apply -f .\Service.yml
+kubectl apply -f .\service.yml
 ```
 Now, all Pods of `js-idrepeater` are reachable through the Service. Check if the Service is running.
 ```powershell
@@ -236,7 +242,7 @@ Next, log on one of the running Pods and call the another one by using the Servi
 kubectl get pods
 ```
 ```powershell
-kubectl exec -it <Pod_NAME_NGINX> /bin/sh
+kubectl exec -it <POD_NAME_NGINX> /bin/sh
 ```
 ```powershell
 wget http://js-idrepeater
@@ -259,7 +265,7 @@ spec:
     type: LoadBalancer
 ```
 ```powershell
-kubectl apply -f .\Service.yml
+kubectl apply -f .\service.yml
 ```
 It will take some time until the IP is scheduled.
 ```powershell
@@ -336,17 +342,17 @@ The exposed Service of the nginx will show a 404 error since we just installed t
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: Ingress-js-idrepeater
+  name: ingress-js-idrepeater
   annotations:
-    Kubernetes.io/Ingress.class: nginx
-    nginx.Ingress.Kubernetes.io/ssl-redirect: "false"
-    nginx.Ingress.Kubernetes.io/rewrite-target: /$2
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
   - http:
       paths:
       - backend:
-          ServiceName: js-idrepeater
-          ServicePort: 80
+          serviceName: js-idrepeater
+          servicePort: 80
         path: /js-idrepeater      
 ```
