@@ -106,7 +106,7 @@ $AKS_RESOURCE_GROUP="<AKS_RESOURCE_GROUP>"
 $AKS_CLUSTER_NAME="<AKS_CLUSTER_NAME>"
 $ACR_RESOURCE_GROUP="<ACR_RESOURCE_GROUP>"
 $ACR_NAME="ACR_NAME"
-$CLIENT_ID=$(az aks show --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME --query "ServicePrincipalProfile.clientId" --output tsv)
+$CLIENT_ID=$(az aks show --resource-group $AKS_RESOURCE_GROUP --name $AKS_CLUSTER_NAME --query "servicePrincipalProfile.clientId" --output tsv)
 $ACR_ID=$(az acr show --name $ACR_NAME --resource-group $ACR_RESOURCE_GROUP --query "id" --output tsv)
 az role assignment create --assignee $CLIENT_ID --role acrpull --scope $ACR_ID
 ```
@@ -239,7 +239,7 @@ kubectl get pods
 kubectl exec -it <Pod_NAME_NGINX> /bin/sh
 ```
 ```powershell
-wget http://idrepeater
+wget http://js-idrepeater
 ```
 ```powershell
 cat index.html
@@ -315,10 +315,10 @@ The `Ingress` will be our reverse proxy.
 </p>
 
 ```powershell
-helm install stable/nginx-Ingress `
+helm install stable/nginx-ingress `
     --set controller.replicaCount=1 `
-    --set controller.nodeSelector."beta\.Kubernetes\.io/os"=linux `
-    --set defaultBackend.nodeSelector."beta\.Kubernetes\.io/os"=linux
+    --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux `
+    --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux
 ```
 The command `helm ls` will show you all installed helm repositories. 
 ```powershell
