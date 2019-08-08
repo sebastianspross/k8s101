@@ -356,3 +356,8 @@ spec:
           servicePort: 80
         path: /js-idrepeater      
 ```
+Apply this ingress route to your cluster.
+```powershell
+kubectl apply -f .\ingress.yml
+```
+Reopen the website. You find the IP by calling `kubectl get svc`.
