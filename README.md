@@ -117,7 +117,7 @@ $ACR_ID=$(az acr show --name $ACR_NAME --resource-group $ACR_RESOURCE_GROUP --qu
 az role assignment create --assignee $CLIENT_ID --role acrpull --scope $ACR_ID
 ```
 > Open the Azure portal and validate if you can see a `role assignment` from the AKS's SP under `Access control` of the ACR.
-## Prepare the sample Node Application 📦
+## Prepare the sample Node Application
 Checkout the `js-idrepater` which is in this GitHub repository.
 Run the docker build command. Tag the image with the application's name (`js-idrepeater`) and set a version number like `1` or `v1`. Notice that we used the prefix `<ACR_NAME>.azurecr.io`. We need this prefix for the docker push command later. Do not forget the dot at the end.
 ```powershell
@@ -361,3 +361,21 @@ Apply this ingress route to your cluster.
 kubectl apply -f .\ingress.yml
 ```
 Reopen the website. You find the IP by calling `kubectl get svc`.
+# Helm, the package manager 📦
+The folder structure of your `js-idrepeater` should look like the following:
+```bash
+├── js-idrepeater
+│   ├── manifests
+│   │   ├── delpoyment.yml
+│   │   ├── service.yml
+│   │   ├── ingress.yml
+│   ├── .dockerignore
+│   ├── .gitignore
+│   ├── Dockerfile
+│   ├── config.js
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── server.js
+│   └── partials/template
+```
+You end up with three YAML-files which describes the way your application should be deployed to Kubernetes. Do you remember that you hard coded the mapping between the label of your Pods and the selector of the Services? This might get tricky when your microservice ecosystem grows and you have to deal with a lot more variables. 
