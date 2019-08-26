@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "js-idrepeater.fullname" . }}-test-connection"
+  labels:
+{{ include "js-idrepeater.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "js-idrepeater.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

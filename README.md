@@ -378,4 +378,26 @@ The folder structure of your `js-idrepeater` should look like the following:
 │   ├── server.js
 │   └── partials/template
 ```
-You end up with three YAML-files which describes the way your application should be deployed to Kubernetes. Do you remember that you hard coded the mapping between the label of your Pods and the selector of the Services? This might get tricky when your microservice ecosystem grows and you have to deal with a lot more variables. 
+You end up with three YAML-files which describes the way your application should be deployed to Kubernetes. Do you remember that you hard-coded the mapping between the label of your Pods and the selector of the Services? This might get tricky when your microservice ecosystem grows and you have to deal with a lot more variables.
+
+At this point we consider to use the package manager Helm. You can find a simple and quick beginner tutorial [here](https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/ "https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/"). I basically extracted some parts and quoted from this bitnami tutorial.
+## What is in for me?
+Helm is an Open Source Project which is massivly pushed from Microsoft. You get the following out of it ([bitnami docs](https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/ "https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/")):
+* Intelligently manage your Kubernetes object definitions
+* Find and use popular software packaged as Kubernetes charts
+* Share your own applications as Kubernetes charts
+* Create reproducible builds of your Kubernetes applications
+* Manage releases of Helm packages  
+
+Let us start with the first scenario and create first of all a chart.
+> Do no forget to navigate to the js-idrepeater folder before you call the following command.
+```powershell
+helm create js-idrepeater
+```
+This command creates a bunch of files. Take a moment and discover the new files. Espacially take notice that the deployment.yaml, ingress.yaml and service.yaml in the template folder is reffering to variables which are set in the values.yaml file. Think about different and more deployment.yaml files in this folder and you are managing everything from one file called values.yaml.
+
+Next, create a dry run to see how helm will merge everything.
+```powershell
+helm install --dry-run --debug ./js-idrepeater
+```
+As you can see in the cmdl ouput, helm create commonly looking Pod, Service and Deployment charts. Before we roll out these templates to our cluster we have to edit them.
