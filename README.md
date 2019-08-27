@@ -382,22 +382,34 @@ You end up with three YAML-files which describes the way your application should
 
 At this point we consider to use the package manager Helm. You can find a simple and quick beginner tutorial [here](https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/ "https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/"). I basically extracted some parts and quoted from this bitnami tutorial.
 ## What is in for me?
-Helm is an Open Source Project which is massivly pushed from Microsoft. You get the following out of it ([bitnami docs](https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/ "https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/")):
+Helm is an Open Source Project which is massively pushed from Microsoft. You get the following out of it ([bitnami docs](https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/ "https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/")):
 * Intelligently manage your Kubernetes object definitions
 * Find and use popular software packaged as Kubernetes charts
 * Share your own applications as Kubernetes charts
 * Create reproducible builds of your Kubernetes applications
 * Manage releases of Helm packages  
 
-Let us start with the first scenario and create first of all a chart.
+## Let's create our first helm chart
 > Do no forget to navigate to the js-idrepeater folder before you call the following command.
 ```powershell
 helm create js-idrepeater
 ```
-This command creates a bunch of files. Take a moment and discover the new files. Espacially take notice that the deployment.yaml, ingress.yaml and service.yaml in the template folder is reffering to variables which are set in the values.yaml file. Think about different and more deployment.yaml files in this folder and you are managing everything from one file called values.yaml.
+This command creates a bunch of files. Take a moment and discover the new files. Especially take notice that the deployment.yaml, ingress.yaml and service.yaml in the template folder is referring to variables which are set in the values.yaml file. Think about different and more deployment.yaml files in this folder and you are managing everything from one file called values.yaml.
 
 Next, create a dry run to see how helm will merge everything.
 ```powershell
 helm install --dry-run --debug ./js-idrepeater
 ```
-As you can see in the cmdl ouput, helm create commonly looking Pod, Service and Deployment charts. Before we roll out these templates to our cluster we have to edit them.
+Review the output. The engine creates commonly looking Pod, Service and Deployment yamls. Before rolling these templates out to our AKS we will customize them.
+> Take a look at the following code snippets. However at the end of the discussions about the snippets there is the full `values.yaml` provided.
+
+ In our former `deployment.yaml` we used the `<ACR_NAME>.azurecr.io/js-idrepeater:1` to describe where Kubernetes should fetch the container image. In this helm notation this reference is split up for better reading. When you have a look into the `deployment.yaml` in the `templates` folder you will find this GO method: `image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"`. Inside the double braces you find
+
+```yaml
+replicaCount: 2
+
+image:
+  repository: <ACR_NAME>.azurecr.io/js-idrepeater
+  tag: 1
+  pullPolicy: IfNotPresent
+```
