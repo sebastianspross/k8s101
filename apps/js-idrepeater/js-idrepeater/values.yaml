@@ -2,29 +2,30 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
+replicaCount: 3
 
 image:
-  repository: nginx
-  tag: stable
+  repository: sesproacr2.azurecr.io/msbackendlnxidrepeater
+  tag: 557
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
 nameOverride: ""
-fullnameOverride: ""
+fullnameOverride: "js-idrepeater"
 
 service:
   type: ClusterIP
   port: 80
 
 ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   hosts:
-    - host: chart-example.local
-      paths: []
+    - paths:
+      - /js-idrepeater
 
   tls: []
   #  - secretName: chart-example-tls

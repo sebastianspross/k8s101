@@ -402,20 +402,70 @@ helm install --dry-run --debug ./js-idrepeater
 ```
 Review the output. The engine creates ordinary looking Pod, Service and Deployment yamls. Before rolling these templates out to our AKS we will customize them.
 ## Customize the boiler template
-> Take a look at the following code snippets. However at the end of the discussions about the snippets there is the full `values.yaml` provided for further usage.
-
- In our former `deployment.yaml` we used the
+In our former `deployment.yaml` we used the
  ```yaml
  <ACR_NAME>.azurecr.io/js-idrepeater:1
  ```
- to describe where Kubernetes should fetch the container image. We want to make use of GO methods which will be interpreted by the helm engine. In the just created `deployment.yaml` it says:
+ to describe where Kubernetes should pull the container image. We want to make use of GO methods which will be later interpreted by the helm engine. In the just created `deployment.yaml` it says:
  ```yaml
  image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
  ```
- Inside the double braces variables are defined. This notation is used in all three files so that you can declare the important once and the once you want to override in the `values.yaml`.
+ Inside the double braces variables are defined. This notation is used in all three files so that you can declare the important once and the once you want to override in the `values.yaml`. When we are tying everything together the replicate the result of the former exercises with vanilla Kubernetes yamls the `values.yaml` looks like:
 ```yaml
+replicaCount: 1
+
 image:
-  repository: <ACR_NAME>.azurecr.io/js-idrepeater
-  tag: 1
+  repository: sesproacr2.azurecr.io/msbackendlnxidrepeater
+  tag: 557
   pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "js-idrepeater"
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  hosts:
+    - paths:
+      - /js-idrepeater
+
+  tls: []
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
 ```
+Use the `helm install` command to publish your chart. Set a name and the path of the chart:
+```powershell
+helm install --name js-idrepeater .\js-idrepeater\
+```
+The output reports if the deployment was successfully. Nevertheless just have a look (po, svc and ing are the abbrevations of pods, service and ingress):
+```powershell
+kubectl get po
+kubectl get svc
+kubectl get ing
+```
+## Perform an upgrade of your chart
+Next just alter the replicaset count to 2 and raise the `version` in the `Chart.yaml` file.
+```yaml
+replicaCount: 2
+```
+When you have done that perform an upgrade based on the charts name with which you deployed it and the local path where your chart is stored.
+```powershell
+helm upgrade js-idrepeater .\js-idrepeater\
+```
+## Package your chart
+You really want to package your chart and make it available for others!
