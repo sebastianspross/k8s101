@@ -1,6 +1,6 @@
 # K8s Hands-on 🚢
 Here, a random introduction will find its place. Probably I will link the ppt in addition.
-> This guided hands-on workshop was tested with AKS 1.12.8.  
+> This guided hands-on workshop was tested with AKS 1.12.8 and Helm 2.14.1.  
 
 > This workshop is accompanied by an instructor and additional slides.  
 
@@ -400,14 +400,20 @@ Next, create a dry run to see how helm will merge everything.
 ```powershell
 helm install --dry-run --debug ./js-idrepeater
 ```
-Review the output. The engine creates commonly looking Pod, Service and Deployment yamls. Before rolling these templates out to our AKS we will customize them.
-> Take a look at the following code snippets. However at the end of the discussions about the snippets there is the full `values.yaml` provided.
+Review the output. The engine creates ordinary looking Pod, Service and Deployment yamls. Before rolling these templates out to our AKS we will customize them.
+## Customize the boiler template
+> Take a look at the following code snippets. However at the end of the discussions about the snippets there is the full `values.yaml` provided for further usage.
 
- In our former `deployment.yaml` we used the `<ACR_NAME>.azurecr.io/js-idrepeater:1` to describe where Kubernetes should fetch the container image. In this helm notation this reference is split up for better reading. When you have a look into the `deployment.yaml` in the `templates` folder you will find this GO method: `image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"`. Inside the double braces you find
-
+ In our former `deployment.yaml` we used the
+ ```yaml
+ <ACR_NAME>.azurecr.io/js-idrepeater:1
+ ```
+ to describe where Kubernetes should fetch the container image. We want to make use of GO methods which will be interpreted by the helm engine. In the just created `deployment.yaml` it says:
+ ```yaml
+ image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+ ```
+ Inside the double braces variables are defined. This notation is used in all three files so that you can declare the important once and the once you want to override in the `values.yaml`.
 ```yaml
-replicaCount: 2
-
 image:
   repository: <ACR_NAME>.azurecr.io/js-idrepeater
   tag: 1
