@@ -56,6 +56,7 @@ kubectl get nodes
 # Kubernetes 101 - the imperative way 🔨
 ## Deploy a cached image
 One of the available pre-cached images is an nginx image. Run it with the following command.
+> Do not worry about the warning that `kubeclt run` will be deprecated. We want to keep things simple for now and will not use it further.
 ```powershell
 kubectl run nginx --image=nginx --replicas=3
 ```
