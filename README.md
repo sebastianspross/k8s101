@@ -380,7 +380,9 @@ The folder structure of your `js-idrepeater` should look like the following:
 ```
 You end up with three YAML-files which describes the way your application should be deployed to Kubernetes. Do you remember that you hard-coded the mapping between the label of your Pods and the selector of the Services? This might get tricky when your microservice ecosystem grows and you have to deal with a lot more variables.
 
-At this point we consider to use the package manager Helm. You can find a simple and quick beginner tutorial [here](https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/ "https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/"). I basically extracted some parts and quoted from this bitnami tutorial.
+At this point we consider to use the package manager Helm. While writing this tutorial Helm is about to change it's concept in version 3. Read about the history of Helm in [this blog post series](https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/ "https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/"). With this background you do not mix up Helm 2 and Helm 3 concepts while googling.
+
+You can find a simple and quick beginner tutorial [here](https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/ "https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/"). I basically extracted some parts and quoted from this bitnami tutorial:
 ## What is in for me?
 Helm is an Open Source Project which is massively pushed from Microsoft. You get the following out of it ([bitnami docs](https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/ "https://docs.bitnami.com/kubernetes/how-to/create-your-first-helm-chart/")):
 * Intelligently manage your Kubernetes object definitions
