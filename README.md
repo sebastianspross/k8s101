@@ -280,39 +280,11 @@ Helm is a package manager and can keep track of your deployments to e.g. roll ba
 ```link
 https://github.com/helm/helm/releases
 ```
-Next, the local `Helm client` has to be connected to your cluster. By calling `helm init`, helm will install the `Tiller`. It is the server side of your package management system.
-```powershell
-helm init
+Next, add the repository with the stable releases of public helm charts.
+```http
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 ```
-Check the versions of your client and tiller.
-```powershell
-helm version
-```
-The `Tiller` needs privileges to install applications. Apply the following yaml with `kubectl apply -f <FILENAME>`
-```yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: tiller
-  namespace: kube-system
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: tiller
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-  - kind: ServiceAccount
-    name: tiller
-    namespace: kube-system
-```
-Let your running `tiller` know about the privilege changes.
-```powershell
-helm init --service-account=tiller --upgrade
-```
+> You may encounter the concept of helm client and tiller, where tiller is the 'server-side' part of helm which handels the deployments in the K8s cluster. This is deprecated since helm version 3.
 ## Setup an Ingress which works with basic http.
 > For simplicity we will use a [basic http](https://docs.microsoft.com/en-us/azure/aks/Ingress-basic "https://docs.microsoft.com/en-us/azure/aks/Ingress-basic") configured nginx. Please consider to use [TLS secured](https://docs.microsoft.com/en-us/azure/aks/Ingress-tls "https://docs.microsoft.com/en-us/azure/aks/Ingress-tlsc") nginx deployments.  
 
