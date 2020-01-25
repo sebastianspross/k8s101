@@ -1,6 +1,6 @@
 # K8s Hands-on 🚢
 Here, a random introduction will find its place. Probably I will link the ppt in addition.
-> This guided hands-on workshop was tested with AKS 1.12.8.  
+> This guided hands-on workshop was tested with AKS 1.14.8.  
 
 > This workshop is accompanied by an instructor and additional slides.  
 
